@@ -184,3 +184,25 @@ taskflow/
 
 └── README.md
 
+
+
+\## Development Status
+
+
+
+TaskFlow currently includes a working FastAPI backend, SQLite database,
+
+algorithm implementations, automated API tests, and a lightweight
+
+JavaScript frontend.
+
+
+
+\## Testing Status
+
+
+
+The current automated test suite contains 11 API tests and all tests
+
+are passing successfully.
+
