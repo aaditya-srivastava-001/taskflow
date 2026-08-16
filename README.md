@@ -1,208 +1,97 @@
-\# TaskFlow
+# TaskFlow
 
+TaskFlow is a full-stack task management application built with a FastAPI
+backend, SQLAlchemy ORM, SQLite database, and a lightweight HTML/CSS/JavaScript
+frontend.
 
-
-TaskFlow is a full-stack task management application built with a
-
-FastAPI backend, SQLAlchemy ORM, SQLite database, and a lightweight
-
-HTML/CSS/JavaScript frontend.
-
-
-
-The project demonstrates REST API development, relational database
-
-design, validation, filtering, SQL aggregation, middleware, CORS,
-
+The project demonstrates REST API development, relational database design,
+validation, filtering, SQL aggregation, middleware, CORS, automated testing,
 and fundamental data structures and algorithms.
 
+---
 
+## Features
 
-\---
+### Backend
 
+- FastAPI REST API
+- SQLAlchemy ORM
+- SQLite database
+- Pydantic validation
+- User management
+- Project management
+- Task management
+- Task CRUD operations
+- Task filtering by status, priority, and project
+- Project statistics
+- SQL aggregation
+- Request timing middleware
+- CORS support
+- HTTP error handling
+- AI-style Quick-Add task creation
+- Algorithm-based task sorting and searching
 
+### Frontend
 
-\## Features
+- Responsive HTML/CSS/JavaScript interface
+- Task dashboard
+- Task statistics
+- Task creation
+- Task editing
+- Task deletion
+- Task search
+- Status filtering
+- Priority filtering
+- AI Quick-Add interface
+- API integration using Fetch API
+- Local browser caching using localStorage
+- DOM-based task rendering
 
-
-
-\### Backend
-
-
-
-\- FastAPI REST API
-
-\- SQLAlchemy ORM
-
-\- SQLite database
-
-\- Pydantic validation
-
-\- User management
-
-\- Project management
-
-\- Task management
-
-\- CRUD operations
-
-\- Task filtering
-
-\- Project statistics
-
-\- SQL aggregation
-
-\- Request timing middleware
-
-\- CORS support
-
-\- Proper HTTP error handling
-
-
-
-\### Algorithms
-
-
+### Algorithms
 
 TaskFlow implements:
 
+- Insertion Sort
+- Linear Search
+- Binary Search
 
+The project also includes:
 
-\- Insertion Sort
+- Comparison counting
+- Algorithm benchmark testing
+- Automated PASS/FAIL algorithm verification
+- Multiple dataset sizes
 
-\- Linear Search
+---
 
-\- Binary Search
+## AI Quick-Add
 
+TaskFlow includes a deterministic AI-style Quick-Add feature that allows users
+to describe a task using natural language.
 
-
-The project also includes a benchmark script to compare algorithm
-
-execution times on different dataset sizes.
-
-
-
-\---
-
-
-
-\## Technology Stack
-
-
-
-\### Backend
-
-
-
-\- Python
-
-\- FastAPI
-
-\- SQLAlchemy
-
-\- Pydantic
-
-\- SQLite
-
-\- Uvicorn
-
-
-
-\### Frontend
-
-
-
-\- HTML5
-
-\- CSS3
-
-\- JavaScript
-
-\- Fetch API
-
-
-
-\### Testing
-
-
-
-\- Pytest
-
-\- HTTPX
-
-
-
-\---
-
-
-
-\## Project Structure
-
-
+Example:
 
 ```text
+Finish project report by Friday high priority
 
-taskflow/
+Technology Stack
 
-│
+Backend
+Python 3.10
+FastAPI
+SQLAlchemy
+Pydantic
+SQLite
+Uvicorn
 
-├── backend/
+Frontend
+HTML5
+CSS3
+JavaScript
+Fetch API
+localStorage
 
-│   ├── main.py
-
-│   ├── database.py
-
-│   ├── models.py
-
-│   ├── schemas.py
-
-│   ├── algorithms.py
-
-│   ├── middleware.py
-
-│   ├── benchmark.py
-
-│   ├── requirements.txt
-
-│   └── tests/
-
-│       └── test\_api.py
-
-│
-
-├── frontend/
-
-│   ├── index.html
-
-│   ├── style.css
-
-│   └── script.js
-
-│
-
-├── .gitignore
-
-└── README.md
-
-
-
-\## Development Status
-
-
-
-TaskFlow currently includes a working FastAPI backend, SQLite database,
-
-algorithm implementations, automated API tests, and a lightweight
-
-JavaScript frontend.
-
-
-
-\## Testing Status
-
-
-
-The current automated test suite contains 11 API tests and all tests
-
-are passing successfully.
-
+Testing
+Pytest
+HTTPX
+FastAPI TestClient

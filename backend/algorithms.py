@@ -3,133 +3,172 @@
 # ==========================================
 
 
-# ------------------------------------------
-# INSERTION SORT
-# ------------------------------------------
-
-def insertion_sort_tasks(tasks):
+def insertion_sort(records, key):
     """
-    Sort tasks by priority using insertion sort.
+    In-place insertion sort.
 
-    Priority order:
-    high -> medium -> low
-
-    Time Complexity:
-        Best:    O(n)
-        Average: O(n^2)
-        Worst:   O(n^2)
-
-    Space Complexity:
-        O(1) auxiliary space
+    Returns nothing.
     """
 
-    priority_rank = {
-        "high": 1,
-        "medium": 2,
-        "low": 3
-    }
+    for i in range(1, len(records)):
 
-    sorted_tasks = tasks.copy()
+        current = records[i]
+        current_value = current[key]
 
-    for i in range(1, len(sorted_tasks)):
+        j = i - 1
 
-        current_task = sorted_tasks[i]
-        current_priority = priority_rank.get(
-            current_task.priority,
-            4
-        )
+        while j >= 0 and records[j][key] > current_value:
+            records[j + 1] = records[j]
+            j -= 1
+
+        records[j + 1] = current
+
+
+def binary_search(sorted_records, target_value, key):
+    """
+    Binary search on records already sorted by key.
+
+    Returns:
+        index of matching record
+        -1 if not found
+    """
+
+    low = 0
+    high = len(sorted_records) - 1
+
+    while low <= high:
+
+        mid = (low + high) // 2
+
+        value = sorted_records[mid][key]
+
+        if value == target_value:
+            return mid
+
+        if value < target_value:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    return -1
+
+
+def linear_search(records, target_value, key):
+    """
+    Linear search.
+
+    Returns:
+        index of first matching record
+        -1 if not found
+    """
+
+    for index, record in enumerate(records):
+
+        if record[key] == target_value:
+            return index
+
+    return -1
+
+
+# ==========================================
+# COUNTING VERSIONS
+# ==========================================
+
+
+def insertion_sort_count(records, key):
+    """
+    In-place insertion sort that returns
+    only the number of key comparisons.
+    """
+
+    comparison_count = 0
+
+    for i in range(1, len(records)):
+
+        current = records[i]
+        current_value = current[key]
 
         j = i - 1
 
         while j >= 0:
 
-            previous_priority = priority_rank.get(
-                sorted_tasks[j].priority,
-                4
-            )
+            comparison_count += 1
 
-            if previous_priority <= current_priority:
+            if records[j][key] <= current_value:
                 break
 
-            sorted_tasks[j + 1] = sorted_tasks[j]
+            records[j + 1] = records[j]
             j -= 1
 
-        sorted_tasks[j + 1] = current_task
+        records[j + 1] = current
 
-    return sorted_tasks
+    return comparison_count
 
 
-# ------------------------------------------
-# LINEAR SEARCH
-# ------------------------------------------
-
-def linear_search_tasks(tasks, title):
+def binary_search_count(sorted_records, target_value, key):
     """
-    Search for a task by title using linear search.
+    Binary search with comparison counting.
 
-    Time Complexity:
-        Best:    O(1)
-        Average: O(n)
-        Worst:   O(n)
-
-    Space Complexity:
-        O(1) auxiliary space
+    Returns exactly:
+        {
+            "index": int,
+            "comparison_count": int
+        }
     """
 
-    search_title = title.strip().lower()
+    low = 0
+    high = len(sorted_records) - 1
+    comparison_count = 0
 
-    for task in tasks:
+    while low <= high:
 
-        if task.title.lower() == search_title:
-            return task
+        mid = (low + high) // 2
 
-    return None
+        comparison_count += 1
 
+        value = sorted_records[mid][key]
 
-# ------------------------------------------
-# BINARY SEARCH
-# ------------------------------------------
+        if value == target_value:
+            return {
+                "index": mid,
+                "comparison_count": comparison_count
+            }
 
-def binary_search_tasks(tasks, title):
-    """
-    Search for a task by title using binary search.
-
-    IMPORTANT:
-    Binary search requires the data to be sorted.
-
-    The function first creates a list sorted by title,
-    then performs binary search.
-
-    Time Complexity:
-        Sorting: O(n log n)
-        Search:  O(log n)
-
-    Space Complexity:
-        O(n) because a sorted copy is created.
-    """
-
-    search_title = title.strip().lower()
-
-    sorted_tasks = sorted(
-        tasks,
-        key=lambda task: task.title.lower()
-    )
-
-    left = 0
-    right = len(sorted_tasks) - 1
-
-    while left <= right:
-
-        middle = (left + right) // 2
-
-        current_title = sorted_tasks[middle].title.lower()
-
-        if current_title == search_title:
-            return sorted_tasks[middle]
-
-        if current_title < search_title:
-            left = middle + 1
+        if value < target_value:
+            low = mid + 1
         else:
-            right = middle - 1
+            high = mid - 1
 
-    return None
+    return {
+        "index": -1,
+        "comparison_count": comparison_count
+    }
+
+
+def linear_search_count(records, target_value, key):
+    """
+    Linear search with comparison counting.
+
+    Returns exactly:
+        {
+            "index": int,
+            "comparison_count": int
+        }
+    """
+
+    comparison_count = 0
+
+    for index, record in enumerate(records):
+
+        comparison_count += 1
+
+        if record[key] == target_value:
+            return {
+                "index": index,
+                "comparison_count": comparison_count
+            }
+
+    return {
+        "index": -1,
+        "comparison_count": comparison_count
+    }

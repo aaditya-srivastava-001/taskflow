@@ -35,6 +35,53 @@
         </section>
 
 
+        <!-- AI QUICK-ADD -->
+
+        <section class="quick-add-card">
+
+            <div class="quick-add-header">
+                <div>
+                    <h2>AI Quick-Add</h2>
+                    <p>
+                        Describe your task naturally and TaskFlow
+                        will extract the title, priority and due date.
+                    </p>
+                </div>
+            </div>
+
+            <div class="quick-add-form">
+
+                <input
+                    type="text"
+                    id="quickAddInput"
+                    placeholder="e.g. Finish project report by Friday high priority"
+                >
+
+                <input
+                    type="number"
+                    id="quickAddProjectId"
+                    value="1"
+                    min="1"
+                    title="Project ID"
+                >
+
+                <button
+                    id="quickAddBtn"
+                    class="primary-btn"
+                >
+                    Quick Add
+                </button>
+
+            </div>
+
+            <p
+                id="quickAddStatus"
+                class="quick-add-status"
+            ></p>
+
+        </section>
+
+
         <!-- STATISTICS -->
 
         <section class="stats-grid">
@@ -179,9 +226,11 @@
 
                         <select id="taskPriority">
                             <option value="high">High</option>
+
                             <option value="medium" selected>
                                 Medium
                             </option>
+
                             <option value="low">Low</option>
                         </select>
                     </label>
@@ -191,6 +240,7 @@
                         Status
 
                         <select id="taskStatus">
+
                             <option value="todo" selected>
                                 Todo
                             </option>
@@ -202,6 +252,7 @@
                             <option value="done">
                                 Done
                             </option>
+
                         </select>
                     </label>
 

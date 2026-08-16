@@ -1,93 +1,111 @@
 import random
-import time
 
 from algorithms import (
-    insertion_sort_tasks,
-    linear_search_tasks,
-    binary_search_tasks
+    insertion_sort_count,
+    linear_search_count,
+    binary_search_count
 )
 
 
-class BenchmarkTask:
-    def __init__(self, title, priority="medium"):
-        self.title = title
-        self.priority = priority
-
-
-def generate_tasks(size):
-    priorities = ["low", "medium", "high"]
-
-    return [
-        BenchmarkTask(
-            title=f"Task {i}",
-            priority=random.choice(priorities)
-        )
+def make_records(size):
+    records = [
+        {
+            "id": i,
+            "title": f"Task {i:06d}"
+        }
         for i in range(size)
     ]
 
+    random.shuffle(records)
 
-def benchmark_insertion_sort(tasks):
-    start = time.perf_counter()
-
-    insertion_sort_tasks(tasks)
-
-    end = time.perf_counter()
-
-    return end - start
-
-
-def benchmark_linear_search(tasks, target):
-    start = time.perf_counter()
-
-    linear_search_tasks(tasks, target)
-
-    end = time.perf_counter()
-
-    return end - start
-
-
-def benchmark_binary_search(tasks, target):
-    start = time.perf_counter()
-
-    binary_search_tasks(tasks, target)
-
-    end = time.perf_counter()
-
-    return end - start
+    return records
 
 
 def run_benchmark():
 
-    dataset_sizes = [100, 500, 1000, 5000]
+    sizes = [100, 1000, 5000]
 
-    print("\nTaskFlow Algorithm Benchmark")
+    print("=" * 60)
+    print("TASKFLOW ALGORITHM COMPARISON BENCHMARK")
     print("=" * 60)
 
-    for size in dataset_sizes:
-
-        tasks = generate_tasks(size)
-
-        target = f"Task {size - 1}"
-
-        insertion_time = benchmark_insertion_sort(tasks)
-
-        linear_time = benchmark_linear_search(
-            tasks,
-            target
-        )
-
-        binary_time = benchmark_binary_search(
-            tasks,
-            target
-        )
+    for size in sizes:
 
         print(f"\nDataset size: {size}")
-        print(f"Insertion Sort : {insertion_time:.8f} seconds")
-        print(f"Linear Search  : {linear_time:.8f} seconds")
-        print(f"Binary Search  : {binary_time:.8f} seconds")
+
+        # -------------------------
+        # INSERTION SORT
+        # -------------------------
+
+        insertion_data = make_records(size)
+
+        insertion_comparisons = insertion_sort_count(
+            insertion_data,
+            "title"
+        )
+
+        print(
+            f"Insertion Sort comparisons: "
+            f"{insertion_comparisons}"
+        )
+
+        # -------------------------
+        # LINEAR SEARCH
+        # -------------------------
+
+        linear_data = make_records(size)
+
+        target = f"Task {size - 1:06d}"
+
+        linear_result = linear_search_count(
+            linear_data,
+            target,
+            "title"
+        )
+
+        print(
+            f"Linear Search comparisons: "
+            f"{linear_result['comparison_count']}"
+        )
+
+        # -------------------------
+        # BINARY SEARCH
+        # -------------------------
+
+        binary_data = make_records(size)
+
+        # Binary search requires sorted data.
+        # We use our own insertion sort.
+        insertion_sort_count(
+            binary_data,
+            "title"
+        )
+
+        binary_result = binary_search_count(
+            binary_data,
+            target,
+            "title"
+        )
+
+        print(
+            f"Binary Search comparisons: "
+            f"{binary_result['comparison_count']}"
+        )
+
+        print(
+            f"Linear result index: "
+            f"{linear_result['index']}"
+        )
+
+        print(
+            f"Binary result index: "
+            f"{binary_result['index']}"
+        )
+
+    print("\n" + "=" * 60)
+    print("BENCHMARK COMPLETE")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
     run_benchmark()
-
-    

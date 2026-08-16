@@ -27,6 +27,23 @@ const taskForm = document.getElementById("taskForm");
 
 
 // ==========================================
+// QUICK-ADD ELEMENTS
+// ==========================================
+
+const quickAddInput =
+    document.getElementById("quickAddInput");
+
+const quickAddProjectId =
+    document.getElementById("quickAddProjectId");
+
+const quickAddBtn =
+    document.getElementById("quickAddBtn");
+
+const quickAddStatus =
+    document.getElementById("quickAddStatus");
+
+
+// ==========================================
 // APPLICATION STATE
 // ==========================================
 
@@ -41,7 +58,8 @@ async function fetchTasks() {
 
     try {
 
-        const response = await fetch(`${API_URL}/tasks`);
+        const response =
+            await fetch(`${API_URL}/tasks`);
 
         if (!response.ok) {
             throw new Error("Failed to fetch tasks");
@@ -54,7 +72,10 @@ async function fetchTasks() {
 
     } catch (error) {
 
-        console.error("Error fetching tasks:", error);
+        console.error(
+            "Error fetching tasks:",
+            error
+        );
 
         showError(
             "Could not connect to the TaskFlow backend."
@@ -70,7 +91,9 @@ async function fetchTasks() {
 function renderTasks() {
 
     const searchTerm =
-        searchInput.value.trim().toLowerCase();
+        searchInput.value
+            .trim()
+            .toLowerCase();
 
     const selectedStatus =
         statusFilter.value;
@@ -79,30 +102,31 @@ function renderTasks() {
         priorityFilter.value;
 
 
-    const filteredTasks = tasks.filter(task => {
+    const filteredTasks =
+        tasks.filter(task => {
 
-        const matchesSearch =
-            task.title
-                .toLowerCase()
-                .includes(searchTerm);
-
-
-        const matchesStatus =
-            !selectedStatus ||
-            task.status === selectedStatus;
+            const matchesSearch =
+                task.title
+                    .toLowerCase()
+                    .includes(searchTerm);
 
 
-        const matchesPriority =
-            !selectedPriority ||
-            task.priority === selectedPriority;
+            const matchesStatus =
+                !selectedStatus ||
+                task.status === selectedStatus;
 
 
-        return (
-            matchesSearch &&
-            matchesStatus &&
-            matchesPriority
-        );
-    });
+            const matchesPriority =
+                !selectedPriority ||
+                task.priority === selectedPriority;
+
+
+            return (
+                matchesSearch &&
+                matchesStatus &&
+                matchesPriority
+            );
+        });
 
 
     taskTableBody.innerHTML = "";
@@ -134,62 +158,125 @@ function renderTasks() {
             document.createElement("tr");
 
 
-        row.innerHTML = `
+        // ------------------------------
+        // TASK CELL
+        // ------------------------------
 
-            <td>
-                <strong>
-                    ${escapeHtml(task.title)}
-                </strong>
+        const taskCell =
+            document.createElement("td");
 
-                ${
-                    task.description
-                        ? `
-                            <div class="task-description">
-                                ${escapeHtml(
-                                    task.description
-                                )}
-                            </div>
-                          `
-                        : ""
-                }
-            </td>
+        const title =
+            document.createElement("strong");
+
+        title.textContent =
+            task.title;
+
+        taskCell.appendChild(title);
 
 
-            <td>
+        if (task.description) {
 
-                <span class="badge priority-${task.priority}">
-                    ${formatPriority(task.priority)}
-                </span>
+            const description =
+                document.createElement("div");
 
-            </td>
+            description.className =
+                "task-description";
 
+            description.textContent =
+                task.description;
 
-            <td>
-
-                <span class="badge status-${task.status}">
-                    ${formatStatus(task.status)}
-                </span>
-
-            </td>
+            taskCell.appendChild(description);
+        }
 
 
-            <td>
-                ${task.due_date || "—"}
-            </td>
+        // ------------------------------
+        // PRIORITY CELL
+        // ------------------------------
+
+        const priorityCell =
+            document.createElement("td");
+
+        const priorityBadge =
+            document.createElement("span");
+
+        priorityBadge.className =
+            `badge priority-${task.priority}`;
+
+        priorityBadge.textContent =
+            formatPriority(task.priority);
+
+        priorityCell.appendChild(
+            priorityBadge
+        );
 
 
-            <td>
+        // ------------------------------
+        // STATUS CELL
+        // ------------------------------
 
-                <button
-                    class="action-btn delete-btn"
-                    onclick="deleteTask(${task.id})"
-                >
-                    Delete
-                </button>
+        const statusCell =
+            document.createElement("td");
 
-            </td>
-        `;
+        const statusBadge =
+            document.createElement("span");
 
+        statusBadge.className =
+            `badge status-${task.status}`;
+
+        statusBadge.textContent =
+            formatStatus(task.status);
+
+        statusCell.appendChild(
+            statusBadge
+        );
+
+
+        // ------------------------------
+        // DUE DATE CELL
+        // ------------------------------
+
+        const dueDateCell =
+            document.createElement("td");
+
+        dueDateCell.textContent =
+            task.due_date || "—";
+
+
+        // ------------------------------
+        // ACTION CELL
+        // ------------------------------
+
+        const actionCell =
+            document.createElement("td");
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "action-btn delete-btn";
+
+        deleteButton.textContent =
+            "Delete";
+
+        deleteButton.addEventListener(
+            "click",
+            () => deleteTask(task.id)
+        );
+
+        actionCell.appendChild(
+            deleteButton
+        );
+
+
+        // ------------------------------
+        // ADD CELLS
+        // ------------------------------
+
+        row.appendChild(taskCell);
+        row.appendChild(priorityCell);
+        row.appendChild(statusCell);
+        row.appendChild(dueDateCell);
+        row.appendChild(actionCell);
 
         taskTableBody.appendChild(row);
 
@@ -229,7 +316,7 @@ function updateStatistics() {
 
 
 // ==========================================
-// CREATE TASK
+// CREATE NORMAL TASK
 // ==========================================
 
 taskForm.addEventListener(
@@ -277,20 +364,21 @@ taskForm.addEventListener(
 
         try {
 
-            const response = await fetch(
-                `${API_URL}/tasks`,
-                {
-                    method: "POST",
+            const response =
+                await fetch(
+                    `${API_URL}/tasks`,
+                    {
+                        method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-                    body:
-                        JSON.stringify(taskData)
-                }
-            );
+                        body:
+                            JSON.stringify(taskData)
+                    }
+                );
 
 
             const data =
@@ -335,6 +423,133 @@ taskForm.addEventListener(
             alert(error.message);
         }
 
+    }
+);
+
+
+// ==========================================
+// AI QUICK-ADD
+// ==========================================
+
+async function quickAddTask() {
+
+    const text =
+        quickAddInput.value.trim();
+
+    const projectId =
+        Number(
+            quickAddProjectId.value
+        );
+
+
+    if (!text) {
+
+        quickAddStatus.textContent =
+            "Please describe the task.";
+
+        return;
+    }
+
+
+    if (!projectId || projectId < 1) {
+
+        quickAddStatus.textContent =
+            "Please enter a valid project ID.";
+
+        return;
+    }
+
+
+    quickAddBtn.disabled = true;
+
+    quickAddStatus.textContent =
+        "Processing task...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/tasks/quick-add`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            text: text,
+                            project_id: projectId
+                        })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Quick-Add failed"
+            );
+        }
+
+
+        quickAddStatus.textContent =
+            `Created: ${data.title} | ` +
+            `Priority: ${formatPriority(data.priority)}` +
+            `${
+                data.due_date
+                    ? ` | Due: ${data.due_date}`
+                    : ""
+            }`;
+
+
+        quickAddInput.value = "";
+
+
+        await fetchTasks();
+
+
+    } catch (error) {
+
+        console.error(
+            "Quick-Add error:",
+            error
+        );
+
+        quickAddStatus.textContent =
+            error.message;
+
+    } finally {
+
+        quickAddBtn.disabled = false;
+    }
+}
+
+
+quickAddBtn.addEventListener(
+    "click",
+    quickAddTask
+);
+
+
+quickAddInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            quickAddTask();
+        }
     }
 );
 
@@ -495,17 +710,6 @@ function formatStatus(status) {
         .charAt(0)
         .toUpperCase() +
         status.slice(1);
-}
-
-
-function escapeHtml(value) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent = value;
-
-    return div.innerHTML;
 }
 
 
